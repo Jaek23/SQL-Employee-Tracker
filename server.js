@@ -21,7 +21,7 @@ const db = mysql.createConnection(
             choices:[
                 "View all departments",
                 "View all roles",
-                "View all employess",
+                "View all employees",
                 "add a department",
                 "add a role",
                 "add an employee",
@@ -30,7 +30,7 @@ const db = mysql.createConnection(
             ],
         })
         .then((answer) =>{
-            switch(answer.action){
+            switch(answer.tracker){
                 case "View all departments":
                 viewAllDepartments();
                 break;
@@ -75,5 +75,92 @@ function viewAllDepartments(){
         if (err) throw err;
         console.table(res);
         generateTracker();
+    });
+}
+
+function viewAllRoles(){
+    const query = "SELECT * FROM roles";
+    db.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        generateTracker();
+    });
+}
+
+function viewAllEmployees(){
+    const query = "SELECT * FROM employee";
+    db.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        generateTracker();
+    });
+}
+
+function addADepartment(){
+    inquirer
+        .prompt({
+            type:"input",
+            name:"departmentName",
+            message:"Enter the name of the new department:",
+        })
+        .then((answer) =>{
+            const query = `INSERT INTO department (department_name) VALUES ("${answer.departmentName}")`;
+            db.query(query, (err, res) => {
+                if (err) throw err;
+                console.table("New department has been added to the database!");
+                generateTracker();
+            });
+        })
+}
+
+function addARole(){
+    const query = "SELECT * FROM department";
+    db.query(query, (err, res) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+
+                {
+                    type:"input",
+                    name: "title",
+                    messgae:"Enter the title of the new role:",
+                },
+
+                {
+                    type:"input",
+                    name: "salary",
+                    messgae:"Enter the salary of the new role:",
+                },
+
+                {
+                    type:"list",
+                    name: "departmentID",
+                    messgae:"Select the department of the new role:",
+                    choices:res.map(
+                        (department) => department.department_name
+                    ),
+                },
+            ])
+            
+            .then((answers) =>{
+                const department = res.find(
+                    (department) => department.name === answers.department
+                ); 
+
+                const query = `INSERT INTO roles SET ?`;
+                db.query(
+                    query,
+                    {
+                        title: answers.title,
+                        salary: answers.salary,
+                        department_id: department,
+                    },
+
+                    (err, res) => {
+                        if (err) throw err;
+                        console.table("New role has been added to the database!");
+                        generateTracker();
+                    });
+            })
     });
 }

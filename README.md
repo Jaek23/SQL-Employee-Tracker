@@ -16,3 +16,4 @@ MIT License
 ![image](https://github.com/Jaek23/SQL-Employee-Tracker/assets/141678374/6970d9f6-6b11-4821-a833-ba9ee1cce83a)
 
 ## Walkthrough Video 
+https://drive.google.com/file/d/1ILGMuoz4c-xFLsSIQrYhweIV-KQ5yp3H/view?usp=sharing

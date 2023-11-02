@@ -4,7 +4,7 @@
 This is the twelfth challenge for the UTA boot camp. This project was created to utilize Node.JS/MySQL. For this challenge, I created a made-up employee database to practice displaying different data about the employees based on the employees' work departments and roles. The focus of this challenge was to understand how to create databases and use MySQL to create user-friendly-looking tables to demonstrate useful information about employees. 
 
 ## Usage 
-Users can use the command line to pull employee information and add new departments to the database.
+Users can use the command line to pull employee information and add new departments/roles/employees to the database.
 
 ## Credits 
 N/A

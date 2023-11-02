@@ -117,6 +117,7 @@ function addARole(){
     const query = "SELECT * FROM department";
     db.query(query, (err, res) => {
         if (err) throw err;
+        console.log(res)
         inquirer
             .prompt([
 
@@ -137,16 +138,13 @@ function addARole(){
                     name: "department",
                     message:"Select the department of the new role:",
                     choices:res.map(
-                        (department) => department.department_name
+                        (department) => ({name:department.department_name,value:department.id})
                     ),
                 },
             ])
             
-            .then((answers) =>{
-                const department = res.find(
-                    (department) => department.name === answers.department
-                ); 
-
+            .then((answers) =>{ 
+                const department = answers.department 
                 const query = "INSERT INTO roles SET ?";
                 db.query(
                     query,
@@ -164,3 +162,61 @@ function addARole(){
             })
     });
 }
+
+function addAnEmployee() {
+    const query = "SELECT id, title FROM roles";
+    db.query(query,(error, results) => {
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        const roles = results.map(({ id, title }) => ({
+            name: title,
+            value: id,
+        }));
+
+                inquirer
+                    .prompt([
+                        {
+                            type: "input",
+                            name: "firstName",
+                            message: "Enter the employee's first name:",
+                        },
+                        {
+                            type: "input",
+                            name: "lastName",
+                            message: "Enter the employee's last name:",
+                        },
+                        {
+                            type: "list",
+                            name: "roleId",
+                            message: "Select the employee role:",
+                            choices: roles,
+                        },
+                    ])
+                    .then((answers) => {
+                        
+                        const sql =
+                            "INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)";
+                        const values = [
+                            answers.firstName,
+                            answers.lastName,
+                            answers.roleId,
+                        ];
+                        db.query(sql, values, (error) => {
+                            if (error) {
+                                console.error(error);
+                                return;
+                            }
+
+                            console.log("Employee added successfully");
+                            generateTracker();
+                        });
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+        );
+    };

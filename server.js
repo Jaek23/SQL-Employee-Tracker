@@ -117,7 +117,6 @@ function addARole(){
     const query = "SELECT * FROM department";
     db.query(query, (err, res) => {
         if (err) throw err;
-        console.log(res)
         inquirer
             .prompt([
 

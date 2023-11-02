@@ -79,7 +79,7 @@ function viewAllDepartments(){
 }
 
 function viewAllRoles(){
-    const query = "SELECT * FROM roles";
+    const query ="SELECT roles.title, roles.id, department.department_name, roles.salary from roles join department on roles.department_id = department.id";
     db.query(query, (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -88,7 +88,7 @@ function viewAllRoles(){
 }
 
 function viewAllEmployees(){
-    const query = "SELECT * FROM employee";
+    const query = 'SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.department_name, roles.salary FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id ';
     db.query(query, (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -113,54 +113,54 @@ function addADepartment(){
         })
 }
 
-// function addARole(){
-//     const query = "SELECT * FROM department";
-//     db.query(query, (err, res) => {
-//         if (err) throw err;
-//         inquirer
-//             .prompt([
+function addARole(){
+    const query = "SELECT * FROM department";
+    db.query(query, (err, res) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
 
-//                 {
-//                     type:"input",
-//                     name: "title",
-//                     messgae:"Enter the title of the new role:",
-//                 },
+                {
+                    type:"input",
+                    name: "title",
+                    message:"Enter the title of the new role:",
+                },
 
-//                 {
-//                     type:"input",
-//                     name: "salary",
-//                     messgae:"Enter the salary of the new role:",
-//                 },
+                {
+                    type:"input",
+                    name: "salary",
+                    messagee:"Enter the salary of the new role:",
+                },
 
-//                 {
-//                     type:"list",
-//                     name: "department",
-//                     messgae:"Select the department of the new role:",
-//                     choices:res.map(
-//                         (department) => department.department_name
-//                     ),
-//                 },
-//             ])
+                {
+                    type:"list",
+                    name: "department",
+                    message:"Select the department of the new role:",
+                    choices:res.map(
+                        (department) => department.department_name
+                    ),
+                },
+            ])
             
-//             .then((answers) =>{
-//                 const department = res.find(
-//                     (department) => department.name === answers.department
-//                 ); 
+            .then((answers) =>{
+                const department = res.find(
+                    (department) => department.name === answers.department
+                ); 
 
-//                 const query = "INSERT INTO roles SET ?";
-//                 db.query(
-//                     query,
-//                     {
-//                         title: answers.title,
-//                         salary: answers.salary,
-//                         department_id: department,
-//                     },
+                const query = "INSERT INTO roles SET ?";
+                db.query(
+                    query,
+                    {
+                        title: answers.title,
+                        salary: answers.salary,
+                        department_id: department,
+                    },
 
-//                     (err, res) => {
-//                         if (err) throw err;
-//                         console.table("New role has been added to the database!");
-//                         generateTracker();
-//                     });
-//             })
-//     });
-// }
+                    (err, res) => {
+                        if (err) throw err;
+                        console.table("New role has been added to the database!");
+                        generateTracker();
+                    });
+            })
+    });
+}
